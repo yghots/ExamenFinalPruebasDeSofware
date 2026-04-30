@@ -16,20 +16,17 @@ public class ScreenPlayCatalogPage {
     private AppiumDriver driver;
     private WebDriverWait wait;
 
-    // --- Localizadores del Login ---
     private By emailInput = By.xpath("//android.widget.EditText[android.widget.TextView[@text=\"Email\"]]");
     private By passwordInput = By.xpath("//android.widget.EditText[android.widget.TextView[@text=\"Contraseña\"]]");
     private By loginButton = By.xpath("//android.view.View[android.widget.TextView[@text=\"Iniciar Sesión\"]]");
     private By welcomeText = By.xpath("//android.widget.TextView[@text=\"Bienvenido de vuelta\"]");
 
-    // --- Localizadores del Catálogo ---
     private By searchInput = By.xpath("//android.widget.EditText");
     private By allFilter = By.xpath("//android.view.View[android.widget.TextView[@text=\"Todos\"]]");
     private By categoriasTab = By.xpath("//android.widget.TextView[@text=\"Categorías\"]");
     private By electronicaCard = By.xpath("//android.view.View[android.widget.TextView[@text=\"Electrónica\"]]");
     private By productScroll = By.xpath("//android.view.View[@scrollable=\"true\"]");
 
-    // Credenciales de prueba
     private static final String TEST_EMAIL = "user1@test.com";
     private static final String TEST_PASSWORD = "password1";
 
@@ -38,7 +35,6 @@ public class ScreenPlayCatalogPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    // ---------- MÉTODOS DE LOGIN ----------
     public boolean isLoginScreenVisible() {
         return !driver.findElements(welcomeText).isEmpty();
     }
@@ -64,7 +60,6 @@ public class ScreenPlayCatalogPage {
                 By.xpath("//android.widget.TextView[@text=\"Inicio\"]")));
     }
 
-    // ---------- MÉTODOS DEL CATÁLOGO ----------
     public void navigateToCatalog() {
         wait.until(ExpectedConditions.elementToBeClickable(categoriasTab)).click();
 
@@ -80,7 +75,6 @@ public class ScreenPlayCatalogPage {
         input.clear();
         input.sendKeys(productName);
         driver.executeScript("mobile: performEditorAction", Map.of("action", "search"));
-        // Pequeña pausa para que carguen los resultados
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
@@ -102,8 +96,7 @@ public class ScreenPlayCatalogPage {
     }
 
     public boolean isProductContainingTextVisible(String partialText) {
-        // Buscar cualquier TextView (excepto los que están dentro de un EditText) que contenga el texto,
-        // o cualquier elemento con content-desc que lo contenga.
+
         By productWithText = By.xpath(
                 "//android.widget.TextView[contains(@text, \"" + partialText + "\") and not(ancestor::android.widget.EditText)]"
                         + " | //*[contains(@content-desc, \"" + partialText + "\")]"
@@ -119,9 +112,7 @@ public class ScreenPlayCatalogPage {
         return "true".equals(checked);
     }
     public void addProductToCart(String productName) {
-        // Asegurar que estamos en catálogo y con filtro "Todos"
         navigateToCatalog();
-        // Buscar el botón "Agregar al carrito" asociado al producto
         By addToCartButton = By.xpath(
                 "//android.widget.TextView[@text=\"" + productName + "\"]/following-sibling::android.view.View[android.widget.Button]"
         );

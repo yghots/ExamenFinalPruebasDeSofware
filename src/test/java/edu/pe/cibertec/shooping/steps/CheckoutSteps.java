@@ -46,7 +46,7 @@ public class CheckoutSteps {
         try {
             checkoutPage.proceedToCheckout();
         } catch (Exception e) {
-            // Esperado si no hay botón (carrito vacío)
+
         }
     }
 

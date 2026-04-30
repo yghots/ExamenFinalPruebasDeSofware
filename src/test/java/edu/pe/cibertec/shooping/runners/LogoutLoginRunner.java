@@ -12,6 +12,6 @@ import org.junit.platform.suite.api.Suite;
 @ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME,
         value = "edu.pe.cibertec.shooping.steps,edu.pe.cibertec.shooping.hooks")
 @ConfigurationParameter(key = Constants.FILTER_TAGS_PROPERTY_NAME,
-        value = "@checkout")
-public class CheckoutRunner {
+        value = "@logout or @login")
+public class LogoutLoginRunner {
 }

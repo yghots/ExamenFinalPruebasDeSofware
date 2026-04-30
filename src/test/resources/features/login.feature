@@ -1,10 +1,12 @@
-Feature: Login to Shopping Cart application
-  As a registered user
-  I want to log in with my credentials
-  So I can access my account and make purchases
+@login
+Feature: Inicio de sesion
 
-  Scenario: Successful login with valid credentials
-    Given Andrea opens the shopping Cart application
-    When she enters her email "user1@test.com" and password "password1"
-    And she taps the Login button
-    Then she should see the main screen of the application
+  Scenario: Login exitoso
+    Given que el usuario esta en la pantalla de login
+    When ingresa credenciales validas
+    Then deberia acceder a la pantalla principal
+
+  Scenario: Login fallido
+    Given que el usuario esta en la pantalla de login
+    When ingresa credenciales invalidas
+    Then deberia ver un mensaje de error

@@ -18,32 +18,25 @@ public class CheckoutPage {
     private AppiumDriver driver;
     private WebDriverWait wait;
 
-    // --- Barra inferior ---
     private By cartTab = By.xpath("//android.widget.TextView[@text=\"Carrito\"]");
 
-    // --- Carrito ---
     private By emptyCartMessage = By.xpath("//android.widget.TextView[@text=\"Tu carrito está vacío\"]");
     private By deleteButton = By.xpath("//android.view.View[@content-desc=\"Eliminar\"]");
     private By proceedToPaymentButton = By.xpath("//android.view.View[android.widget.TextView[@text=\"Proceder al Pago\"]]");
 
-    // --- Checkout (Shipping) ---
     private By checkoutTitle = By.xpath("//android.widget.TextView[@text=\"Checkout\"]");
     private By direccionInput = By.xpath("//android.widget.EditText[android.widget.TextView[@text=\"Dirección\"]]");
     private By ciudadInput = By.xpath("//android.widget.EditText[android.widget.TextView[@text=\"Ciudad\"]]");
     private By codigoPostalInput = By.xpath("//android.widget.EditText[android.widget.TextView[@text=\"Código Postal\"]]");
 
-    // --- Método de pago (Tarjeta ya está seleccionada por defecto) ---
     private By numeroTarjetaInput = By.xpath("//android.widget.EditText[android.widget.TextView[@text=\"Número de tarjeta\"]]");
     private By expiraMMYYInput = By.xpath("//android.widget.EditText[android.widget.TextView[@text=\"MM/YY\"]]");
     private By cvvInput = By.xpath("//android.widget.EditText[android.widget.TextView[@text=\"CVV\"]]");
 
-    // --- Confirmación ---
     private By confirmarButton = By.xpath("//android.view.View[android.widget.TextView[@text=\"Confirmar Compra\"]]");
 
-    // --- Éxito ---
     private By pedidoConfirmadoText = By.xpath("//android.widget.TextView[@text=\"¡Pedido Confirmado!\"]");
 
-    // --- Error de dirección (TEXTO REAL) ---
     private By direccionError = By.xpath("//android.widget.TextView[@text=\"La dirección es requerida\"]");
 
     public CheckoutPage() {
@@ -51,12 +44,10 @@ public class CheckoutPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    // ---------- NAVEGACIÓN ----------
     public void goToCart() {
         wait.until(ExpectedConditions.elementToBeClickable(cartTab)).click();
     }
 
-    // ---------- CARRITO VACÍO ----------
     public boolean isCartEmptyMessageDisplayed() {
         return !driver.findElements(emptyCartMessage).isEmpty();
     }
@@ -80,7 +71,6 @@ public class CheckoutPage {
         wait.until(ExpectedConditions.elementToBeClickable(proceedToPaymentButton)).click();
     }
 
-    // ---------- DATOS DE ENVÍO ----------
     public void enterShippingData(String direccion, String ciudad, String codigoPostal) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(checkoutTitle));
         WebElement dir = wait.until(ExpectedConditions.elementToBeClickable(direccionInput));
@@ -96,10 +86,8 @@ public class CheckoutPage {
 
     public void enterOnlyCityAndPostal(String ciudad, String codigoPostal) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(checkoutTitle));
-        // Aseguramos que el campo dirección esté totalmente vacío
         WebElement dir = wait.until(ExpectedConditions.elementToBeClickable(direccionInput));
         dir.clear();
-        // Luego llenamos ciudad y código postal
         WebElement ciu = wait.until(ExpectedConditions.elementToBeClickable(ciudadInput));
         ciu.clear();
         ciu.sendKeys(ciudad);
@@ -108,7 +96,6 @@ public class CheckoutPage {
         cp.sendKeys(codigoPostal);
     }
 
-    // ---------- DATOS DE TARJETA ----------
     public void enterCreditCardData(String numero, String exp, String cvv) {
         WebElement num = wait.until(ExpectedConditions.elementToBeClickable(numeroTarjetaInput));
         num.clear();
@@ -121,9 +108,7 @@ public class CheckoutPage {
         cvvEl.sendKeys(cvv);
     }
 
-    // ---------- CONFIRMAR COMPRA (con scroll garantizado) ----------
     public void confirmPurchase() {
-        // Dos swipes hacia arriba para revelar el botón (mejor con PointerInput LEFT)
         scrollUp();
         scrollUp();
         WebElement confirm = wait.until(ExpectedConditions.presenceOfElementLocated(confirmarButton));
@@ -132,7 +117,6 @@ public class CheckoutPage {
     }
 
     private void scrollUp() {
-        // Swipe desde y=1600 hasta y=800 (coordenadas ajustadas a tu app)
         int startX = 540;
         int startY = 1600;
         int endY = 800;
@@ -149,7 +133,6 @@ public class CheckoutPage {
         try { Thread.sleep(800); } catch (InterruptedException ignored) { }
     }
 
-    // ---------- VERIFICACIONES ----------
     public boolean isPurchaseSuccessMessageDisplayed() {
         return !driver.findElements(pedidoConfirmadoText).isEmpty();
     }
